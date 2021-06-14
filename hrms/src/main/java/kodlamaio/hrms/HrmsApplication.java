@@ -22,6 +22,5 @@ public class HrmsApplication {
           .select()                                  
           .apis(RequestHandlerSelectors.basePackage("kodlamaio.hrms"))              
 	          .build();                                           
-	    }
-	
+	    }	
 }
