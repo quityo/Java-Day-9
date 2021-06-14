@@ -37,7 +37,7 @@ public class ImageManager implements ImageService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Result add(MultipartFile file, Image image) throws IOException {
-		Map<String,String> getImage = (Map<String,String>)cloudinaryService.save(file).getData();
+		Map<String,String> getImage = (Map<String,String>)cloudinaryService.uploadImageFile(file).getData();
 		image.setUrl(getImage.get("url"));
 		image.setUploadedAt(LocalDate.now());
 		var result = this.imageDao.save(image);
