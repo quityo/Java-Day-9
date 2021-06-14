@@ -3,14 +3,10 @@ package kodlamaio.hrms.business.concretes;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.ExperienceService;
-import kodlamaio.hrms.business.constants.Messages;
 import kodlamaio.hrms.core.utilities.results.DataResult;
-import kodlamaio.hrms.core.utilities.results.ErrorDataResult;
-import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
@@ -30,45 +26,39 @@ public class ExperienceManager implements ExperienceService {
 
 	@Override
 	public Result add(Experience experience) {
-		var result = this.experienceDao.save(experience);
-		
-		if (result != null) {
-			return new SuccessResult(Messages.experienceAdded);
-		}
-		return new ErrorResult(Messages.experienceNotAdded);
+		this.experienceDao.save(experience);
+		return new SuccessResult("Experience has been added.");
+	}
+
+	@Override
+	public Result update(Experience experience) {
+		this.experienceDao.save(experience);
+		return new SuccessResult("Experience has been updated.");
+	}
+
+	@Override
+	public Result delete(int id) {
+		this.experienceDao.deleteById(id);
+		return new SuccessResult("Experience has been deleted.");
+	}
+
+	@Override
+	public DataResult<Experience> getById(int id) {
+		return new SuccessDataResult<Experience>(this.experienceDao.getById(id));
 	}
 
 	@Override
 	public DataResult<List<Experience>> getAll() {
-		var result = this.experienceDao.findAll();
-		
-		if (result != null) {
-			return new SuccessDataResult<List<Experience>>(result);
-		}
-		return new ErrorDataResult<List<Experience>>("Something is wrong");
+		return new SuccessDataResult<List<Experience>>(this.experienceDao.findAll());
 	}
 
 	@Override
-	public DataResult<List<Experience>> getByJobSeekerIdOrderByDateOfEndASC(int jobSeeker_id) {
-		Sort sortBy = Sort.by(Sort.Direction.ASC,"dateOfEnd");
-		
-		var result = this.experienceDao.getByJobSeekerId(sortBy,jobSeeker_id);
-		if ( result != null) {
-			return new SuccessDataResult<List<Experience>>(result,"ASC sorted.");
-		}
-		return new ErrorDataResult<List<Experience>>("Something is wrong. ASC NOT sorted");
+	public DataResult<List<Experience>> getAllByJobseekerIdOrderByEndAtDesc(int id) {
+		return new SuccessDataResult<List<Experience>>(this.experienceDao.getAllByJobseeker_idOrderByEndAtDesc(id));
 	}
 
 	@Override
-	public DataResult<List<Experience>> getByJobSeekerIdOrderByDateOfEndDESC(int jobSeeker_id) {
-		Sort sortBy = Sort.by(Sort.Direction.DESC,"dateOfEnd");
-		
-		var result = this.experienceDao.getByJobSeekerId(sortBy,jobSeeker_id);
-		if(result != null){
-			return new SuccessDataResult<List<Experience>>(result,"DESC sorted.");
-			}
-		return new ErrorDataResult<List<Experience>>("Something is wrong. DESC NOT sorted.");
+	public DataResult<List<Experience>> getAllByJobseekerId(int id) {
+		return new SuccessDataResult<List<Experience>>(this.experienceDao.getAllByJobseeker_id(id));
 	}
-	
-	
 }

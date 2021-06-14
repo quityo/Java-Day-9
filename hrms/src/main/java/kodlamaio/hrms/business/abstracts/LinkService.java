@@ -8,6 +8,9 @@ import kodlamaio.hrms.entities.concretes.Link;
 
 public interface LinkService {
 	Result add(Link link);
+	Result update(Link link);
+	Result delete(int id);
+	DataResult<Link> getById(int id);	
 	DataResult<List<Link>> getAll();
-	DataResult<List<Link>> getByJobSeekerId(int jobSeekerId);
+	DataResult<List<Link>> getByJobseekerId(int id);
 }

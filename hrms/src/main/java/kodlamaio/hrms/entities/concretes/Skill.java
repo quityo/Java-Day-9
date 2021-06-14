@@ -8,34 +8,29 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Entity
+@Data
+@Table(name = "skills")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="skills")
-
-public class Skill {
+public class Skill{
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-
-    @Column(name = "name")
-    @NotNull
-    @NotBlank
-    private String name;
-
-    @ManyToOne()
-    @NotNull
-    @NotBlank
-    @JoinColumn(name = "jobSeeker_id")
-    private JobSeeker jobSeeker;
+	
+	@Column(name = "skill_name")
+	
+	private String skillName;
+	
+	@ManyToOne()
+    
+	@JoinColumn(name = "jobseeker_id")
+	private Jobseeker jobseeker;
 }

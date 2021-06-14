@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.LinkService;
-import kodlamaio.hrms.business.constants.Messages;
 import kodlamaio.hrms.core.utilities.results.DataResult;
-import kodlamaio.hrms.core.utilities.results.ErrorDataResult;
-import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
@@ -29,29 +26,35 @@ public class LinkManager implements LinkService {
 	
 	@Override
 	public Result add(Link link) {
-		var result = this.linkDao.save(link);
-		if (result != null) {
-			return new SuccessResult(Messages.linkAdded);
-		}
-		return new ErrorResult(Messages.linkNotAdded);
+		this.linkDao.save(link);
+		return new SuccessResult("Link has been added.");
+	}
+
+	@Override
+	public Result update(Link link) {
+		this.linkDao.save(link);
+		return new SuccessResult("Link has been updated.");
+	}
+
+	@Override
+	public Result delete(int id) {
+		this.linkDao.deleteById(id);
+		return new SuccessResult("Link has been deleted.");
+	}
+
+	@Override
+	public DataResult<Link> getById(int id) {
+		return new SuccessDataResult<Link>(this.linkDao.getById(id));
 	}
 
 	@Override
 	public DataResult<List<Link>> getAll() {
-		var result = this.linkDao.findAll();
-		if (result != null) {
-			return new SuccessDataResult<List<Link>>(result,"links get ok");
-		}
-		return new ErrorDataResult<List<Link>>("Something is wrong");
+		return new SuccessDataResult<List<Link>>(this.linkDao.findAll());
 	}
 
 	@Override
-	public DataResult<List<Link>> getByJobSeekerId(int jobSeekerId) {
-		var result = this.linkDao.getByJobSeekerId(jobSeekerId);
-		if (result != null) {
-			return new SuccessDataResult<List<Link>>(result);
-		}
-		return new ErrorDataResult<List<Link>>("Something is worng");
+	public DataResult<List<Link>> getByJobseekerId(int id) {
+		return new SuccessDataResult<List<Link>>(this.linkDao.getAllByJobseeker_id(id));
 	}
 
 }

@@ -3,14 +3,10 @@ package kodlamaio.hrms.business.concretes;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.EducationService;
-import kodlamaio.hrms.business.constants.Messages;
 import kodlamaio.hrms.core.utilities.results.DataResult;
-import kodlamaio.hrms.core.utilities.results.ErrorDataResult;
-import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
@@ -30,40 +26,40 @@ public class EducationManager implements EducationService {
 
 	@Override
 	public Result add(Education education) {
-		var result = this.educationDao.save(education);
-		if (result != null) {
-			return new SuccessResult(Messages.educationAdded);
-		}
-		return new ErrorResult(Messages.educationNotAdded);
+		this.educationDao.save(education);
+		return new SuccessResult("School has been added.");
+	}
+
+	@Override
+	public Result update(Education education) {
+		this.educationDao.save(education);
+		return new SuccessResult("School has been updated.");
+	}
+
+	@Override
+	public Result delete(int id) {
+		this.educationDao.deleteById(id);
+		return new SuccessResult("School has been deleted.");
+	}
+
+	@Override
+	public DataResult<Education> getById(int id) {
+		return new SuccessDataResult<Education>(this.educationDao.getById(id));
 	}
 
 	@Override
 	public DataResult<List<Education>> getAll() {
-		var result = this.educationDao.findAll();
-		if (result != null) {
-			return new SuccessDataResult<List<Education>>(result);
-		}
-		return new ErrorDataResult<List<Education>>();
+		return new SuccessDataResult<List<Education>>(this.educationDao.findAll());
 	}
 
 	@Override
-	public DataResult<List<Education>> getByJobSeekerIdOrderByGraduationDateASC(int jobSeekerId) {
-		Sort sortBy = Sort.by(Sort.Direction.ASC,"graduationDate");
-		var result = this.educationDao.getByJobSeekerId(sortBy,jobSeekerId);
-		if (result != null) {
-			return new SuccessDataResult<List<Education>>(result,"ASC sorted.");
-		}
-		return new SuccessDataResult<List<Education>>("Something is wrong. ASC NOT sorted");
+	public DataResult<List<Education>> getAllByJobseekerIdOrderByEndAtDesc(int id) {
+		return new SuccessDataResult<List<Education>>(this.educationDao.getAllByJobseeker_idOrderByEndAtDesc(id));
 	}
 
 	@Override
-	public DataResult<List<Education>> getByJobSeekerIdOrderByGraduationDateDESC(int jobSeekerId) {
-		Sort sortBy = Sort.by(Sort.Direction.DESC,"graduationDate");
-		var result = this.educationDao.getByJobSeekerId(sortBy,jobSeekerId);
-		if (result != null) {
-			return new SuccessDataResult<List<Education>>(result,"DESC sorted.");
-		}
-		return new SuccessDataResult<List<Education>>("Something is wrong. DESC NOT sorted.");
+	public DataResult<List<Education>> getAllByJobseekerId(int id) {
+		return new SuccessDataResult<List<Education>>(this.educationDao.getAllByJobseeker_id(id));
 	}
 
 }

@@ -12,6 +12,6 @@ import kodlamaio.hrms.entities.concretes.Image;
 public interface ImageService {
 	Result add(MultipartFile file, Image image)throws IOException;
 	DataResult<Image> getById(int id)throws IOException;
-	DataResult<List<Image>> getByJobSeekerId(int jobSeekerId);
-
+	DataResult<List<Image>> getByUserId(int userId);
 }
+

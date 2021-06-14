@@ -8,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,18 +25,15 @@ public class Link {
 	@Column(name = "id",nullable = false)
 	private int id;
 	
-    @Column(name = "title",nullable = false)
-    @NotNull
-    @NotBlank
-    private String title;
+	@Column(name = "name",nullable = false)
     
-    @NotNull
-    @NotBlank
-    @Column(name = "path")
-    private String path;
-    
-    @ManyToOne()
-    @JoinColumn(name = "jobSeeker_id",nullable = false)
-    private JobSeeker jobSeeker;
-
+    private String name;
+	
+	
+	@Column(name = "url")
+	private String url;	
+	
+	@ManyToOne()
+	@JoinColumn(name = "jobseeker_id")
+	private Jobseeker jobseeker;
 }

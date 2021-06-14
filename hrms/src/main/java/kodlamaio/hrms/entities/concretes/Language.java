@@ -10,8 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,26 +20,22 @@ import lombok.NoArgsConstructor;
 @Table(name = "languages")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Language {
+public class Language{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id",nullable = false)
 	private int id;
 	
-    @Column(name = "name",nullable = false)
-    @NotNull
-    @NotBlank
-    private String name;
-    
-    @Column(name = "level")
-    @Min(1)
-    @Max(5)
-    @NotNull
-    private short level;
+	@Column(name = "language")
+	private String language;
 	
-    @ManyToOne()
-    @JoinColumn(name = "jobSeeker_id",nullable = false)
-    private JobSeeker jobSeeker;
+	@Min(value = 1)
+	@Max(value = 5)
+	@Column(name = "level")
+	private int level;	
 
+	@ManyToOne()
+	@JoinColumn(name = "jobseeker_id")
+	private Jobseeker jobseeker;
 }

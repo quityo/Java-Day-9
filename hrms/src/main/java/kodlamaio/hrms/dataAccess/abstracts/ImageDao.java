@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import kodlamaio.hrms.entities.concretes.Image;
 
 public interface ImageDao extends JpaRepository<Image, Integer> { 
-	List<Image> getByJobSeekerId(int jobSeekerId);
+	List<Image> getByUserId(int userId);
 	Image getById(int id);
 }

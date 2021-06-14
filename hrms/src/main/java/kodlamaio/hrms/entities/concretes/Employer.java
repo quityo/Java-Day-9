@@ -1,53 +1,59 @@
 package kodlamaio.hrms.entities.concretes;
 
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import kodlamaio.hrms.core.entities.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@PrimaryKeyJoinColumn(name="user_id",referencedColumnName = "id")
-@Data
-@Entity
-@Table(name = "employers")
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 
+@Table(name = "employers")
+@Data
+@EqualsAndHashCode(callSuper=false)
+@Entity
+@AllArgsConstructor
+@PrimaryKeyJoinColumn(name = "user_id")
+@NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","jobAdverts"})
 public class Employer extends User{
+
 	
-	@Column(name = "company_name",nullable = false)
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@NotNull
+    @Column(name = "id")
+    private int id;
+	
+	@Column(name= "company_name")
 	private String companyName;
 	
-	@Column(name = "web_address",nullable = false)
-	@NotBlank
-	@NotNull(message="required")
-	private String webAddress;
+	@Column(name= "website")
+	private String website;
 	
-	@Column(name = "phone_number",nullable = false)
-	@NotBlank
-	@NotNull(message="required")
-	@Pattern(regexp ="[0-9\\s]{12}")
+	@Column(name= "phone_number")
 	private String phoneNumber;
 	
-	@OneToMany(mappedBy= "employer")
-	private List<JobAnnouncement> jobAnnouncements;
+	@Column(name="is_activated")
+	private boolean isActivated;
+	
+	//@OneToMany(mappedBy = "employer")
+	//private List<JobAdvert> jobAdverts;
 
-	public Employer(String email,String password, boolean status, String companyName, String webAddress, String phoneNumber) {
-		super(email,password,status);
-		this.companyName = companyName;
-		this.webAddress = webAddress;
-		this.phoneNumber = phoneNumber;
-	}
-
+	
 	
 }

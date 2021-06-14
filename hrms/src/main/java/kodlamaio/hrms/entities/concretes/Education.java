@@ -8,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,30 +18,28 @@ import lombok.NoArgsConstructor;
 @Table(name = "educations")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Education {
+public class Education{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id",nullable = false)
 	private int id;
 	
-    @Column(name = "name")
-    @NotNull
-    @NotBlank
-    private String name;
-
-    @Column(name = "department")
-    private String department;
+	@Column(name = "name")
     
-    @Column(name = "start_date")
-    @NotNull
-    private int startDate;
-    
-    @Column(name = "graduation_date")
-    private int graduationDate;
-    
-    @ManyToOne()
-    @JoinColumn(name = "jobSeeker_id")
-    private JobSeeker jobSeeker;
+    private String schoolName;
 	
+	@Column(name = "department")
+	private String department;
+	
+	@Column(name = "start_at")
+	
+    private int startAt;
+	
+	@Column(name = "end_at")
+	private int endAt;
+
+	@ManyToOne()
+	@JoinColumn(name = "jobseeker_id")
+	private Jobseeker jobseeker;
 }

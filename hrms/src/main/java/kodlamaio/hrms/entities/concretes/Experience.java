@@ -1,5 +1,7 @@
 package kodlamaio.hrms.entities.concretes;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,35 +17,29 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "job_experiences")
+@Table(name = "experiences")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Experience {
+public class Experience{
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id",nullable = false)
-	private int id;
-	
-    @Column(name = "workplace_name",nullable = false)
-    @NotNull
-    @NotBlank
-    private String workplaceName;
-    
-    @Column(name = "position",nullable = false)
-    @NotNull
-    @NotBlank
-    private String position;
-	
-    @Column(name = "date_of_start",nullable = false)
-    @NotNull
-    private int dateOfStart;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
 
-    @Column(name = "date_of_end")
-    private int dateOfEnd;
-    
-    @ManyToOne()
-    @JoinColumn(name = "jobSeeker_id",nullable = false)
-    private JobSeeker jobSeeker;
+	@Column(name = "working_place")
+	private String workingPlace;
 	
+	@Column(name = "position")
+	private String position;
+	
+	@Column(name = "start_at")
+	private LocalDate startAt;
+	
+	@Column(name = "end_at", nullable = true)
+	private LocalDate endAt;
+	
+	@ManyToOne()
+	@JoinColumn(name = "jobseeker_id")
+	private Jobseeker jobseeker;
 }

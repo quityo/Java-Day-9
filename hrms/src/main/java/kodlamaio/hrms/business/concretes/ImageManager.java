@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kodlamaio.hrms.business.abstracts.ImageService;
 import kodlamaio.hrms.business.constants.Messages;
-import kodlamaio.hrms.core.utilities.helpers.abstracts.FileHelper;
+import kodlamaio.hrms.core.utilities.helpers.abstracts.CloudinaryService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.ErrorDataResult;
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
@@ -25,19 +25,20 @@ import kodlamaio.hrms.entities.concretes.Image;
 public class ImageManager implements ImageService {
 
 	private ImageDao imageDao;
-	private FileHelper helper;
+	private CloudinaryService cloudinaryService;
 	
 	@Autowired
-	public ImageManager(ImageDao imageDao,FileHelper helper) {
+	public ImageManager(ImageDao imageDao,CloudinaryService cloudinaryService) {
 		super();
 		this.imageDao = imageDao;
-		this.helper = helper;
+		this.cloudinaryService = cloudinaryService;
 	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Result add(MultipartFile file, Image image) throws IOException {
-		Map<String,String> getImage = (Map<String,String>)helper.upload(file).getData();
-		image.setPath(getImage.get("url"));
+		Map<String,String> getImage = (Map<String,String>)cloudinaryService.save(file).getData();
+		image.setUrl(getImage.get("url"));
 		image.setUploadedAt(LocalDate.now());
 		var result = this.imageDao.save(image);
 		if(result != null) {
@@ -56,12 +57,14 @@ public class ImageManager implements ImageService {
 	}
 
 	@Override
-	public DataResult<List<Image>> getByJobSeekerId(int jobSeekerId) {
-		var result =  this.imageDao.getByJobSeekerId(jobSeekerId);
+	public DataResult<List<Image>> getByUserId(int userId) {
+		var result =  this.imageDao.getByUserId(userId);
 		if (result != null) {
-			return new SuccessDataResult<List<Image>>(this.imageDao.getByJobSeekerId(jobSeekerId));
+			return new SuccessDataResult<List<Image>>(this.imageDao.getByUserId(userId));
 		}
 		return new ErrorDataResult<List<Image>>("Image NOT Founded");
 	}
+
+	
 
 }
