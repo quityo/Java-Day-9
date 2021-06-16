@@ -2,23 +2,28 @@ package kodlamaio.hrms.api.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import kodlamaio.hrms.business.abstracts.ExperienceService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.entities.concretes.Experience;
+import kodlamaio.hrms.entities.dtos.ExperienceDto;
 
 @RestController
 @RequestMapping("/api/jobExperiences")
 @CrossOrigin
+@Api(value = "experience api documentation")
 public class ExperiencesController {
 	
 	private ExperienceService experienceService;
@@ -30,37 +35,23 @@ public class ExperiencesController {
 	}
 	
 	@PostMapping("/add")
-	public Result add(@RequestBody Experience experience){
+	public Result add(@Valid @RequestBody ExperienceDto experience){
 		return this.experienceService.add(experience);
 	}
 	
-	@PostMapping("/update")
-	public Result update(@RequestBody Experience experience){
-		return this.experienceService.update(experience);
-	}
-	
-	@PostMapping("/delete")
-	public Result delete(@RequestParam("id") int id){
-		return this.experienceService.delete(id);
-	}
-	
-	@GetMapping("/getbyid")
-	public DataResult<Experience> getById(@RequestParam int id){
-		return this.experienceService.getById(id);
-	}
-	
 	@GetMapping("/getall")
-	public DataResult<List<Experience>> getAll(){
-		return this.experienceService.getAll();
-	}
+    @ApiOperation("Get All Experience")
+    DataResult<List<Experience>> getAll() {
+        return this.experienceService.getAll();
+
+    }
 	
-	@GetMapping("/getAllByJobseekerIdOrderByEndAtDesc")
-	public DataResult<List<Experience>> getAllByJobseekerIdOrderByEndAtDesc(@RequestParam("id") int id){
-		return this.experienceService.getAllByJobseekerIdOrderByEndAtDesc(id);
-	}
+	 @GetMapping("/getCvExperiences")
+	 public DataResult<List<ExperienceDto>> findAllByCvIdOrderByEndeAt(int cvId) {
+
+	      return this.experienceService.findAllByCvIdOrderByEndAt(cvId);
+	  }
+
 	
-	@GetMapping("/getAllByJobseekerId")
-	public DataResult<List<Experience>> getAllByJobseekerId(@RequestParam int id){
-		return this.experienceService.getAllByJobseekerId(id);
-	}
+	
 }

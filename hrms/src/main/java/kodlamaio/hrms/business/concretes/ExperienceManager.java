@@ -6,59 +6,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.ExperienceService;
+import kodlamaio.hrms.core.utilities.helpers.abstracts.DtoConverterService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
-import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
-import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.dataAccess.abstracts.ExperienceDao;
 import kodlamaio.hrms.entities.concretes.Experience;
+import kodlamaio.hrms.entities.dtos.ExperienceDto;
 
 @Service
 public class ExperienceManager implements ExperienceService {
 
 	private ExperienceDao experienceDao;
-	
-	@Autowired
-	public  ExperienceManager(ExperienceDao experienceDao) {
-		super();
-		this.experienceDao = experienceDao;
-	}
+    private DtoConverterService dtoConverterService;
 
-	@Override
-	public Result add(Experience experience) {
-		this.experienceDao.save(experience);
-		return new SuccessResult("Experience has been added.");
-	}
+    @Autowired
+    public  ExperienceManager( ExperienceDao experienceDao, DtoConverterService dtoConverterService) {
+        this.experienceDao = experienceDao;
+        this.dtoConverterService = dtoConverterService;
+    }
 
-	@Override
-	public Result update(Experience experience) {
-		this.experienceDao.save(experience);
-		return new SuccessResult("Experience has been updated.");
-	}
+    @Override
+    public DataResult<List< Experience>> getAll() {
+        return new SuccessDataResult<List< Experience>>(this.experienceDao.findAll(), "Data Listelendi");
+    }
 
-	@Override
-	public Result delete(int id) {
-		this.experienceDao.deleteById(id);
-		return new SuccessResult("Experience has been deleted.");
-	}
+    @Override
+    public DataResult< ExperienceDto> add( ExperienceDto experienceDto) {
+        this.experienceDao.save(( Experience) dtoConverterService.dtoClassConverter(experienceDto,  Experience.class));
+        return new SuccessDataResult< ExperienceDto>(experienceDto, "İş Deneyimi Eklendi");
+    }
 
-	@Override
-	public DataResult<Experience> getById(int id) {
-		return new SuccessDataResult<Experience>(this.experienceDao.getById(id));
-	}
-
-	@Override
-	public DataResult<List<Experience>> getAll() {
-		return new SuccessDataResult<List<Experience>>(this.experienceDao.findAll());
-	}
-
-	@Override
-	public DataResult<List<Experience>> getAllByJobseekerIdOrderByEndAtDesc(int id) {
-		return new SuccessDataResult<List<Experience>>(this.experienceDao.getAllByJobseeker_idOrderByEndAtDesc(id));
-	}
-
-	@Override
-	public DataResult<List<Experience>> getAllByJobseekerId(int id) {
-		return new SuccessDataResult<List<Experience>>(this.experienceDao.getAllByJobseeker_id(id));
-	}
+    @Override
+    public DataResult<List< ExperienceDto>> findAllByCvIdOrderByEndAt(int cvId) {
+        List< Experience> experiences = experienceDao.findAllByCvIdOrderByEndAtDesc(cvId);
+        return new SuccessDataResult<List< ExperienceDto>>(dtoConverterService.dtoConverter(experiences,  ExperienceDto.class));
+    }
 }

@@ -2,12 +2,19 @@ package kodlamaio.hrms.api.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import kodlamaio.hrms.business.abstracts.EmployeeService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.entities.concretes.Employee;
@@ -25,8 +32,26 @@ public class EmployeesController {
 		this.employeeService = employeeService;
 	}
 	
-	@GetMapping("/getall")
-	public DataResult<List<Employee>> getAll(){
-		return this.employeeService.getAll();
+	@GetMapping("/getAll")
+    @ApiOperation(value = "GetAll Method")
+    public DataResult<List<Employee>> getAll() {
+
+        return this.employeeService.getAll();
 	}
+	@PostMapping("/add")
+    @ApiOperation(value = "ADD Method")
+    public ResponseEntity<?> add(@RequestBody @Valid Employee employee) {
+
+        return ResponseEntity.ok(this.employeeService.add(employee));
+        
+	}
+	@PostMapping("/verifyUser")
+    @ApiOperation(value = "Verify Method")
+    public ResponseEntity<?> verifiedUser(@Valid @RequestParam("id")int employerId,@RequestParam("verified")boolean
+    		verified) {
+
+        return ResponseEntity.ok(this.employeeService.verifyEmployer(employerId,verified));
+
+
+    }
 }

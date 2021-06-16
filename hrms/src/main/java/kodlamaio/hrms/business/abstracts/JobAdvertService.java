@@ -1,20 +1,22 @@
 package kodlamaio.hrms.business.abstracts;
 
+import java.sql.Date;
 import java.util.List;
 
 import kodlamaio.hrms.core.utilities.results.DataResult;
-import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.entities.concretes.JobAdvert;
+import kodlamaio.hrms.entities.dtos.JobAdvertDto;
+import kodlamaio.hrms.entities.dtos.JobAdvertRequestDto;
 
 public interface JobAdvertService {
 
-	Result add(JobAdvert jobAdvert);
-	Result update(JobAdvert jobAdvert);
-	Result delete(int id);
-	Result changeOpenToClose(int id);
-	DataResult<JobAdvert> getById(int id);	
-	DataResult<List<JobAdvert>> getAll();
-	DataResult<List<JobAdvert>> getAllOpenJobAdvertList();
-	DataResult<List<JobAdvert>> findAllByOrderByPublishedAt();
-	DataResult<List<JobAdvert>> getAllOpenJobAdvertByEmployer(int id);
+	DataResult<List<JobAdvertDto>> getAllAd();
+    DataResult<JobAdvertRequestDto> addAd(JobAdvertRequestDto jobAdvert);
+
+
+    DataResult<List<JobAdvertDto>> getActive();
+    DataResult<List<JobAdvertDto>> getEmpId(int id);
+    DataResult<List<JobAdvertDto>> getAdDate();
+    DataResult<List<JobAdvertDto>> getAdCustomDate(Date date);
+    DataResult<JobAdvert> updateActive(int id, boolean active);
 }

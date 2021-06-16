@@ -56,6 +56,8 @@ public class ImageManager implements ImageService {
 		return new ErrorDataResult<Image>("Image NOT Founded");
 	}
 
+	
+
 	@Override
 	public DataResult<List<Image>> getByUserId(int userId) {
 		var result =  this.imageDao.getByUserId(userId);
@@ -64,7 +66,5 @@ public class ImageManager implements ImageService {
 		}
 		return new ErrorDataResult<List<Image>>("Image NOT Founded");
 	}
-
-	
 
 }

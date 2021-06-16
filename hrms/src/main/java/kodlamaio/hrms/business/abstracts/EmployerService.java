@@ -17,6 +17,6 @@ public interface EmployerService {
 //	Result update(Employer employer);
 //	Result delete(int id);
 	DataResult<Employer> getById(int id);
-	
+
 	DataResult<List<Employer>> getAll();
 }

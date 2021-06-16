@@ -2,64 +2,49 @@ package kodlamaio.hrms.business.concretes;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.EducationService;
+import kodlamaio.hrms.core.utilities.helpers.abstracts.DtoConverterService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
-import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
-import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.dataAccess.abstracts.EducationDao;
 import kodlamaio.hrms.entities.concretes.Education;
+import kodlamaio.hrms.entities.dtos.EducationDto;
 
 @Service
 public class EducationManager implements EducationService {
 
-	private EducationDao educationDao;
-	
-	@Autowired
-	public EducationManager(EducationDao educationDao) {
-		super();
-		this.educationDao = educationDao;
-	}
+    private EducationDao educationDao;
+    private DtoConverterService dtoConverterService;
 
-	@Override
-	public Result add(Education education) {
-		this.educationDao.save(education);
-		return new SuccessResult("School has been added.");
-	}
+    @Autowired
+    public EducationManager(EducationDao educationDao, ModelMapper modelMapper, DtoConverterService dtoConverterService) {
+        this.educationDao = educationDao;
+        this.dtoConverterService = dtoConverterService;
+    }
 
-	@Override
-	public Result update(Education education) {
-		this.educationDao.save(education);
-		return new SuccessResult("School has been updated.");
-	}
+    @Override
+    public DataResult<List<EducationDto>> getAll() {
+        return new SuccessDataResult<List<EducationDto>>(dtoConverterService.dtoConverter(educationDao.findAll(),EducationDto.class),"Data Listelendi");
+    }
 
-	@Override
-	public Result delete(int id) {
-		this.educationDao.deleteById(id);
-		return new SuccessResult("School has been deleted.");
-	}
+    @Override
+    public DataResult<EducationDto> add(EducationDto educationDto) {
+        this.educationDao.save((Education) dtoConverterService.dtoClassConverter(educationDto, Education.class));
+        return new SuccessDataResult<EducationDto>(educationDto, "Okul Eklendi");
 
-	@Override
-	public DataResult<Education> getById(int id) {
-		return new SuccessDataResult<Education>(this.educationDao.getById(id));
-	}
 
-	@Override
-	public DataResult<List<Education>> getAll() {
-		return new SuccessDataResult<List<Education>>(this.educationDao.findAll());
-	}
+    }
 
-	@Override
-	public DataResult<List<Education>> getAllByJobseekerIdOrderByEndAtDesc(int id) {
-		return new SuccessDataResult<List<Education>>(this.educationDao.getAllByJobseeker_idOrderByEndAtDesc(id));
-	}
-
-	@Override
-	public DataResult<List<Education>> getAllByJobseekerId(int id) {
-		return new SuccessDataResult<List<Education>>(this.educationDao.getAllByJobseeker_id(id));
-	}
-
+    @Override
+    public DataResult<List<EducationDto>> findAllByCvIdOrderByEndAtDesc(int cvId) {
+        List<Education> educations = educationDao.findAllByCvIdOrderByEndAtDesc(cvId);
+        return new SuccessDataResult<List<EducationDto>>(dtoConverterService.dtoConverter(educations,EducationDto.class));
+    }
+    //private List<EducationDto> educationToDto(List<Education> educations) {
+       // return educations.stream().map(Education -> modelMapper.map(Education, EducationDto.class)).collect(Collectors.toList());
+   // }
 }

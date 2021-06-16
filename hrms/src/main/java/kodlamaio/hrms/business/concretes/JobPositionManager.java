@@ -1,5 +1,6 @@
 package kodlamaio.hrms.business.concretes;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -24,6 +25,11 @@ public class JobPositionManager implements JobPositionService{
 		super();
 		this.jobPositionDao = jobPositionDao;
 	}
+	 @Override
+	    public DataResult<Optional<JobPosition>> getById(int id) {
+	        // TODO Auto-generated method stub
+	        return new SuccessDataResult<Optional<JobPosition>>(this.jobPositionDao.findById(id));
+	    }
 
 	@Override
 	public Result add(JobPosition jobPosition) {

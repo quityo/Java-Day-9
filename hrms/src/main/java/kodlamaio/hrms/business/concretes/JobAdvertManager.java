@@ -1,97 +1,86 @@
 package kodlamaio.hrms.business.concretes;
 
+
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.JobAdvertService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
-import kodlamaio.hrms.core.utilities.results.ErrorResult;
-import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
-import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.dataAccess.abstracts.JobAdvertDao;
 import kodlamaio.hrms.entities.concretes.JobAdvert;
+import kodlamaio.hrms.entities.dtos.JobAdvertDto;
+import kodlamaio.hrms.entities.dtos.JobAdvertRequestDto;
+
+import java.sql.Date;
+import java.util.stream.Collectors;
 
 @Service
 public class JobAdvertManager implements JobAdvertService {
-
 	private JobAdvertDao jobAdvertDao;
+    private ModelMapper modelMapper;
 
-	@Autowired
-	public JobAdvertManager(JobAdvertDao jobAdvertDao) {
-		super();
-		this.jobAdvertDao = jobAdvertDao;
-	}
 
-	@Override
-	public Result add(JobAdvert jobAdvert) {
-		if (!CheckIfNullField(jobAdvert)) {
-			return new ErrorResult("You have entered missing information. Please fill in all fields.");
-		}
-		this.jobAdvertDao.save(jobAdvert);
-		return new SuccessResult("Job advert has been added.");
-	}
 
-	@Override
-	public Result update(JobAdvert jobAdvert) {
-		this.jobAdvertDao.save(jobAdvert);
-		return new SuccessResult("Job advert has been updated.");
-	}
+    @Autowired
+    public JobAdvertManager(JobAdvertDao jobAdvertDao, ModelMapper modelMapper) {
+        super();
+        this.jobAdvertDao = jobAdvertDao;
+        this.modelMapper = modelMapper;
 
-	@Override
-	public Result delete(int id) {
-		this.jobAdvertDao.deleteById(id);
-		return new SuccessResult("Job advert has been deleted.");
-	}
 
-	@Override
-	public DataResult<JobAdvert> getById(int id) {
-		return new SuccessDataResult<JobAdvert>(this.jobAdvertDao.getById(id));
-	}
 
-	@Override
-	public DataResult<List<JobAdvert>> getAll() {
-		return new SuccessDataResult<List<JobAdvert>>(this.jobAdvertDao.findAll());
-	}
+    }
 
-	@Override
-	public Result changeOpenToClose(int id) {
-		if (getById(id) == null) {
-			return new ErrorResult("There is no such job advert");
+    @Override
+    public DataResult<List<JobAdvertDto>> getAllAd() {
+        List<JobAdvert> jobAdverts = jobAdvertDao.findAll();
+        return  new SuccessDataResult<List<JobAdvertDto>>(jobAdvertToDto(jobAdverts), "Başarıyla Listelendi");
+    }
 
-		}
-		if (getById(id).getData().isOpen() == false) {
-			return new ErrorResult("There job advert is already closed.");
-		}
+    @Override
+    public DataResult<JobAdvertRequestDto> addAd(JobAdvertRequestDto jobAdvert) {
+    	JobAdvert jobAdverts = modelMapper.map(jobAdvert,JobAdvert.class);
+    	jobAdvertDao.save(jobAdverts);
 
-		JobAdvert jobAdvert = getById(id).getData();
-		jobAdvert.setOpen(false);
-		update(jobAdvert);
-		return new SuccessResult("Job advert has been successfully closed.");
-	}
+        return new SuccessDataResult<JobAdvertRequestDto>(jobAdvert, "İlan Eklendi");
+    }
 
-	@Override
-	public DataResult<List<JobAdvert>> getAllOpenJobAdvertList() {
-		return new SuccessDataResult<List<JobAdvert>>(this.jobAdvertDao.getAllOpenJobAdvertList());
-	}
+    @Override
+    public DataResult<List<JobAdvertDto>> getActive() {
+        List<JobAdvert> jobAdverts = jobAdvertDao.findAllByActiveTrue();
+        return new SuccessDataResult<List<JobAdvertDto>>(jobAdvertToDto(jobAdverts), "Tüm Aktif İlanlar Listelendi");
+    }
 
-	@Override
-	public DataResult<List<JobAdvert>> findAllByOrderByPublishedAt() {
-		return new SuccessDataResult<List<JobAdvert>>(this.jobAdvertDao.findAllByOrderByPublishedAtDesc());
-	}
+    @Override
+    public DataResult<List<JobAdvertDto>> getEmpId(int id) {
+        List<JobAdvert> jobAdverts = jobAdvertDao.findAllByEmployerIdAndActiveTrue(id);
+        return new SuccessDataResult<List<JobAdvertDto>>(jobAdvertToDto(jobAdverts), "Firmaya ait İş ilanları Listelendi");
+    }
 
-	@Override
-	public DataResult<List<JobAdvert>> getAllOpenJobAdvertByEmployer(int id) {
-		return new SuccessDataResult<List<JobAdvert>>(this.jobAdvertDao.getAllOpenJobAdvertByEmployer(id));
-	}
+    @Override
+    public DataResult<List<JobAdvertDto>> getAdDate() {
+        List<JobAdvert> jobAdverts = jobAdvertDao.findAllByActiveTrueOrderByEndDateDesc();
+        return new SuccessDataResult<List<JobAdvertDto>>(jobAdvertToDto(jobAdverts), "Aktif İlanlar Tarihe Göre Listelendi");
+    }
 
-	private boolean CheckIfNullField(JobAdvert jobAdvert) {
-		if (jobAdvert.getJobPosition() != null && jobAdvert.getDescription() != null && jobAdvert.getCity() != null
-				&& jobAdvert.getOpenPositionCount() != 0) {
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public DataResult<List<JobAdvertDto>> getAdCustomDate(Date date) {
+        List<JobAdvert> jobAdverts = jobAdvertDao.findAllByCreatedAt(date);
+        return new SuccessDataResult<List<JobAdvertDto>>(jobAdvertToDto(jobAdverts), "İstenilen Tarihe Göre Sıralandı");
+    }
+
+    @Override
+    public DataResult<JobAdvert> updateActive(int id, boolean active) {
+    	JobAdvert tempAdvert = jobAdvertDao.findById(id).orElse(null);
+        tempAdvert.setActive(active);
+        this.jobAdvertDao.save(tempAdvert);
+        return new SuccessDataResult<JobAdvert>(tempAdvert, "Güncellendi");
+    }
+    private List<JobAdvertDto> jobAdvertToDto(List<JobAdvert> jobAdverts) {
+        return jobAdverts.stream().map(Advert -> modelMapper.map(Advert, JobAdvertDto.class)).collect(Collectors.toList());
+    }
 }

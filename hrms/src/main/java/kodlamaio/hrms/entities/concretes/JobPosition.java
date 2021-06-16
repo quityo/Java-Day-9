@@ -9,7 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -29,17 +31,12 @@ public class JobPosition{
 	@Column(name = "id",nullable = false)
 	private int id;
 	
-	
+	@NotBlank
 	@Column(name="job_title")
 	private String jobTitle;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "jobPosition")
 	private List<JobAdvert> jobAdverts;
 
-	public JobPosition(String jobTitle, List<JobAdvert> jobAdverts) {
-		super();
-		this.jobTitle = jobTitle;
-		this.jobAdverts = jobAdverts;
-	} 
-		
-}
+	}
