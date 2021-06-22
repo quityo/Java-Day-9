@@ -12,43 +12,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.ApiOperation;
 import kodlamaio.hrms.business.abstracts.EducationService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
-import kodlamaio.hrms.entities.dtos.EducationDto;
+import kodlamaio.hrms.entities.concretes.Education;
 
 @RestController
-@RequestMapping(value = "/api/education")
+@RequestMapping("/api/educations")
 @CrossOrigin
 public class EducationsController {
-    private EducationService educationService;
+	private EducationService educationService;
 
-    @Autowired
-    public EducationsController(EducationService educationService) {
-        this.educationService = educationService;
-    }
+	@Autowired
+	public EducationsController(EducationService educationService) {
+		super();
+		this.educationService = educationService;
+	}
 
-    @GetMapping("/getall")
-    @ApiOperation("Get All Education")
-    DataResult<List<EducationDto>> getAll() {
-        return this.educationService.getAll();
-
-    }
-
-    @PostMapping(value = "/add")
-    @ApiOperation("Add Education")
-    public Result add(@Valid @RequestBody EducationDto education) {
-
-        return this.educationService.add(education);
-
-    }
-
-    @GetMapping("/getCvEducations")
-    @ApiOperation("Get All Education")
-    public DataResult<List<EducationDto>> findAllByCvIdOrderByEndAt(int cvId) {
-
-        return this.educationService.findAllByCvIdOrderByEndAtDesc(cvId);
-    }
+	@PostMapping("/add")
+	public Result add(@Valid @RequestBody Education education) {
+		return this.educationService.add(education);
+	}
+	
+	@GetMapping("/getall")
+	public DataResult<List<Education>> getAll() {
+		return this.educationService.getAll();
+	}
 
 }

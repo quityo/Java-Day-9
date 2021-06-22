@@ -1,6 +1,5 @@
 package kodlamaio.hrms.entities.concretes;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,9 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.Length;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,56 +26,40 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
-@Table(name = "candidates_cv ")
+@Table(name = "cv ")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","cv"})
 
 public class Cv {
 	
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "cv_id")
+	private int cvId;
 
-    @ManyToOne(targetEntity = Jobseeker.class)
-    @JoinColumn(name = "Jobseeker_id", referencedColumnName = "id", nullable = false)
-    private Jobseeker jobseeker;
+	@JsonProperty(access = Access.WRITE_ONLY)
+	@JoinColumn(name = "jobseeker_id", referencedColumnName = "user_id")
+	@ManyToOne()
+	private Jobseeker jobseeker;
 
-    @Column(name = "github_address")
-    private String githubAddress;
+	@Column(name = "github_address")
+	private String githubAddress;
 
-    @Column (name = "linkedin_address")
-    private  String linkedinAddress;
+	@Column(name = "linkedin_address")
+	private String linkedinAddress;
 
-    @Length(max = 300)
-    @Column(name = "description")
-    private  String description;
+	@Column(name = "cover_letter")
+	private String coverLetter;
 
-    @Column(name = "created_date", columnDefinition = "Date default CURRENT_DATE")
-    private final LocalDateTime createdDate = LocalDateTime.now();
+	@OneToMany(mappedBy = "cv")
+	private List<Education> educations;
 
-    @Column (name = "is_active")
-    private boolean isActive;
+	@OneToMany(mappedBy = "cv")
+	private List<Experience> experiences;
 
-    @Column(name = "image")
-    private String image;
+	@OneToMany(mappedBy = "cv")
+	private List<Language> languages;
 
-
-    @OneToMany(mappedBy = "cv")
-    private List<Skill> skills;
-
-
-    @OneToMany(mappedBy = "cv")
-    private List<Education> educations;
-
-
-    @OneToMany(mappedBy = "cv")
-    private List<Experience> experiences;
-
-
-    @OneToMany(mappedBy = "cv")
-    private List<Language> languages;
-
-
-
+	@OneToMany(mappedBy = "cv")
+	private List<Skill> skills;
 
 }

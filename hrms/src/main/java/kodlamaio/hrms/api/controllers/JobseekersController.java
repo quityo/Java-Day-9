@@ -17,10 +17,9 @@ import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.entities.concretes.Jobseeker;
 
-
-@CrossOrigin
 @RestController
 @RequestMapping("/api/jobseekers")
+@CrossOrigin
 public class JobseekersController {
 
 	private JobseekerService jobseekerService;
@@ -30,37 +29,14 @@ public class JobseekersController {
 		super();
 		this.jobseekerService = jobseekerService;
 	}
-		
-	@PostMapping("/add")
-    public Result add(@RequestBody @Valid  Jobseeker jobseeker) throws Exception {
-        return this.jobseekerService.add(jobseeker);
 
-    }
-//	
-//	@PostMapping("/update")
-//	public Result update(@RequestBody Jobseeker jobseeker){
-//		return this.jobseekerService.update(jobseeker);
-//	}
-//	
-//	@PostMapping("/delete")
-//	public Result delete(@RequestParam("id") int id){
-//		return this.jobseekerService.delete(id);
-//	}
-//	
-//	@GetMapping("/getbyid")
-//	public DataResult<Jobseeker> getById(@RequestParam("id") int id){
-//		return this.jobseekerService.getById(id);
-//	}
-	
 	@GetMapping("/getall")
-	public DataResult<List<Jobseeker>> getAll(){
+	public DataResult<List<Jobseeker>> getAll() {
 		return this.jobseekerService.getAll();
 	}
-	
 
-	@GetMapping("/getAllAsc")
-	public DataResult<List<Jobseeker>> getAllSorted(){
-		return this.jobseekerService.getAllSorted();
+	@PostMapping("/add")
+	public Result add(@Valid @RequestBody Jobseeker jobseeker) {
+		return this.jobseekerService.add(jobseeker);
 	}
-	
 }

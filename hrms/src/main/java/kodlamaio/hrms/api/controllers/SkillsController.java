@@ -17,7 +17,6 @@ import kodlamaio.hrms.business.abstracts.SkillService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.entities.concretes.Skill;
-import kodlamaio.hrms.entities.dtos.SkillDto;
 
 @RestController
 @RequestMapping("/api/skills")
@@ -34,7 +33,7 @@ public class SkillsController {
 	};
 	
 	@PostMapping("/add")
-	public Result add(@Valid @RequestBody SkillDto skill){
+	public Result add(@Valid @RequestBody Skill skill){
 		return this.skillService.add(skill);
 	}
 	

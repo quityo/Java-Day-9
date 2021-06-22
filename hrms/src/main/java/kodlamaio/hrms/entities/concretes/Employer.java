@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -22,6 +23,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "employers")
+@PrimaryKeyJoinColumn(name = "user_id")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,8 +42,8 @@ public class Employer extends User{
 	@Column(name= "phone_number")
 	private String phoneNumber;
 	
-	@Column(name = "verified", columnDefinition = "boolean default false")
-	private boolean verified = false;
+	@Column(name = "is_accepted")
+	private boolean isAccepted;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "employer")

@@ -23,15 +23,15 @@ import lombok.NoArgsConstructor;
 @Table(name = "work_times")
 public class WorkTime {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "work_time_id")
+	private int workTimeId;
     
     @Column(name = "title")
     private String title;
 
     @JsonIgnore
     @OneToMany(mappedBy = "workTime")
-    private List<JobAdvert> advertisement;
+    private List<JobAdvert> jobAdverts;
 }

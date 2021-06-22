@@ -13,8 +13,8 @@ import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 
 @Service
 public class UserManager implements UserService {
-private UserDao userDao;
-	
+	private UserDao userDao;
+
 	@Autowired
 	public UserManager(UserDao userDao) {
 		super();
@@ -22,38 +22,13 @@ private UserDao userDao;
 	}
 
 	@Override
-	public User add(User user) {
-		return userDao.save(user);
-	}
-//
-//	@Override
-//	public Result update(User user) {
-//		this.userDao.save(user);
-//      return new SuccessResult("User has been updated.");
-//	}
-//
-//	@Override
-//	public Result delete(int id) {
-//		this.userDao.deleteById(id);
-//      return new SuccessResult("User has been deleted.");
-//	}
-//
-//	@Override
-//	public DataResult<User> getById(int id) {
-//		return new SuccessDataResult<User>(this.userDao.getById(id));
-//	}
-
-	@Override
 	public DataResult<List<User>> getAll() {
-		return new SuccessDataResult<List<User>>(this.userDao.findAll());
+		return new SuccessDataResult<List<User>>(this.userDao.findAll(), "Kullanıcılar listelendi");
+
 	}
 
 	@Override
-	public DataResult<User> findUserByEmail(String email) {
-
-		
-		return new SuccessDataResult<User>
-		(this.userDao.findUserByEmail(email),"Kullanici bulundu");
+	public DataResult<User> getByEmail(String email) {
+		return new SuccessDataResult<User>(this.userDao.findByEmail(email));
 	}
-
 }

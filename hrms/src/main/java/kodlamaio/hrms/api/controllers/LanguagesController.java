@@ -12,19 +12,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.Api;
 import kodlamaio.hrms.business.abstracts.LanguageService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.entities.concretes.Language;
-import kodlamaio.hrms.entities.dtos.LanguageDto;
+
 
 @RestController
 @RequestMapping("/api/languages")
 @CrossOrigin
-@Api("Language Api Documantation")
 public class LanguagesController {
-	
+
 	private LanguageService languageService;
 
 	@Autowired
@@ -32,19 +30,15 @@ public class LanguagesController {
 		super();
 		this.languageService = languageService;
 	}
-	
-	@PostMapping("/add")
-	public Result add(@Valid @RequestBody LanguageDto language) {
 
-        return this.languageService.add(language);
+	@PostMapping("/add")
+	public Result add(@Valid @RequestBody Language language) {
+		return this.languageService.add(language);
 	}
-	
-	
 	
 	@GetMapping("/getall")
-	public DataResult<List<Language>> getAll(){
+	public DataResult<List<Language>> getAll() {
 		return this.languageService.getAll();
 	}
-	
-	
+
 }

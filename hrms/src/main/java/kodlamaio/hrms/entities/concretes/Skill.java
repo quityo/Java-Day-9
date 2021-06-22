@@ -26,15 +26,15 @@ import lombok.NoArgsConstructor;
 public class Skill{
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "skill_id")
+	private int skillId;
 	
 	@NotBlank
 	@Column(name = "skill_name")
 	private String skillName;
 	
-	@ManyToOne(targetEntity = Cv.class)
+	@ManyToOne
 	@JoinColumn(name = "cv_id")
 	private Cv cv;
 }

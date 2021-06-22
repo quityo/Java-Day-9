@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,28 +27,23 @@ import lombok.NoArgsConstructor;
 public class Experience{
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "experience_id")
+	private int experienceId;
 
 	@NotBlank
 	@Column(name = "working_place")
 	private String workingPlace;
 	
 	@NotBlank
-	@Column(name = "start_at")
-	private LocalDate startAt;
+	@Column(name = "start_year_of_work")
+	private LocalDate startYearOfWork;
 	
 	@NotBlank
-	@Column(name = "end_at", nullable = true)
-	private LocalDate endAt;
+	@Column(name = "end_year_of_work")
+	private LocalDate endYearOfWork;
 	
-	@ManyToOne(targetEntity = JobPosition.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "job_position_id", referencedColumnName = "id", nullable = false)
-	@NotBlank
-	private  JobPosition jobPosition;
-	
-	@ManyToOne(targetEntity = Cv.class)
+	@ManyToOne()
     @JoinColumn(name = "cv_id")
     private Cv cv;
 	

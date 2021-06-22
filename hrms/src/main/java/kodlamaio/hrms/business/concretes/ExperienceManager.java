@@ -3,26 +3,26 @@ package kodlamaio.hrms.business.concretes;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.ExperienceService;
-import kodlamaio.hrms.core.utilities.helpers.abstracts.DtoConverterService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
+import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
+import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.dataAccess.abstracts.ExperienceDao;
 import kodlamaio.hrms.entities.concretes.Experience;
-import kodlamaio.hrms.entities.dtos.ExperienceDto;
 
 @Service
 public class ExperienceManager implements ExperienceService {
 
 	private ExperienceDao experienceDao;
-    private DtoConverterService dtoConverterService;
 
     @Autowired
-    public  ExperienceManager( ExperienceDao experienceDao, DtoConverterService dtoConverterService) {
+    public  ExperienceManager( ExperienceDao experienceDao) {
+    	super();
         this.experienceDao = experienceDao;
-        this.dtoConverterService = dtoConverterService;
     }
 
     @Override
@@ -31,14 +31,14 @@ public class ExperienceManager implements ExperienceService {
     }
 
     @Override
-    public DataResult< ExperienceDto> add( ExperienceDto experienceDto) {
-        this.experienceDao.save(( Experience) dtoConverterService.dtoClassConverter(experienceDto,  Experience.class));
-        return new SuccessDataResult< ExperienceDto>(experienceDto, "İş Deneyimi Eklendi");
-    }
+	public Result add(Experience experience) {
+		this.experienceDao.save(experience);
+		return new SuccessResult("İş tecrübesi eklendi");
+	}
 
-    @Override
-    public DataResult<List< ExperienceDto>> findAllByCvIdOrderByEndAt(int cvId) {
-        List< Experience> experiences = experienceDao.findAllByCvIdOrderByEndAtDesc(cvId);
-        return new SuccessDataResult<List< ExperienceDto>>(dtoConverterService.dtoConverter(experiences,  ExperienceDto.class));
-    }
+	@Override
+	public DataResult<List<Experience>> sortByEndAt() {
+		Sort sort = Sort.by(Sort.Direction.DESC, "endYearOfWork");
+		return new SuccessDataResult<List<Experience>>(this.experienceDao.findAll(sort));}
+	
 }

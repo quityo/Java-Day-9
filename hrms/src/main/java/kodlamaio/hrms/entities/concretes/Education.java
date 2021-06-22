@@ -1,6 +1,6 @@
 package kodlamaio.hrms.entities.concretes;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -28,33 +28,29 @@ public class Education{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id",nullable = false)
-	private int id;
+	@Column(name = "education_id")
+	private int educationId;
 	
-	@Column(name = "name")
+	@Column(name = "school_name")
 	@NotBlank
-    private String name;
+    private String schoolName;
 	
 	@Column(name = "department")
 	@NotBlank
 	private String department;
 	
-	@Column(name = "start_at")
-	private Date startAt;
+	@Column(name = "start_year_of_school")
+	private LocalDate startYearOfSchool;
 	
-	@Column(name = "end_at")
-	private Date endAt;
+	@Column(name = "end_year_of_school")
+	private LocalDate endYearOfSchool;
 
 	 @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	 @ManyToOne(targetEntity = Cv.class)
+	 @ManyToOne
 	 @JoinColumn(name = "cv_id")
 	 private Cv cv;
 	 
-	 @ManyToOne(targetEntity = Graduate.class)
-	    @JoinColumn(name = "graduate_id", referencedColumnName = "id", nullable = false)
-	    private Graduate graduate;
-	 
 	 @Column(name = "created_date", columnDefinition = "Date default CURRENT_DATE")
-	    private final LocalDateTime createdDate = LocalDateTime.now();
+	 private final LocalDateTime createdDate = LocalDateTime.now();
 	
 }

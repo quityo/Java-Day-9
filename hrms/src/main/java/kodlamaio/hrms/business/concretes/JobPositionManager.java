@@ -1,77 +1,63 @@
 package kodlamaio.hrms.business.concretes;
+
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.JobPositionService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
-import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
+import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.dataAccess.abstracts.JobPositionDao;
 import kodlamaio.hrms.entities.concretes.JobPosition;
 
 @Service
-public class JobPositionManager implements JobPositionService{
+public class JobPositionManager implements JobPositionService {
 
 	private JobPositionDao jobPositionDao;
-	
+
 	@Autowired
 	public JobPositionManager(JobPositionDao jobPositionDao) {
 		super();
 		this.jobPositionDao = jobPositionDao;
 	}
-	 @Override
-	    public DataResult<Optional<JobPosition>> getById(int id) {
-	        // TODO Auto-generated method stub
-	        return new SuccessDataResult<Optional<JobPosition>>(this.jobPositionDao.findById(id));
-	    }
-
-	@Override
-	public Result add(JobPosition jobPosition) {
-		if(getJobByTitle(jobPosition.getJobTitle()).getData() != null){
-			return new ErrorResult( jobPosition.getJobTitle() + " already exists");
-		}
-		this.jobPositionDao.save(jobPosition);
-	    return new SuccessResult("Job position has been added.");
-	}
-//
-//	@Override
-//	public Result update(JobPosition jobPosition) {
-//		this.jobPositionDao.save(jobPosition);
-//      return new SuccessResult("Job position has been updated.");
-//	}
-//
-//	@Override
-//	public Result delete(int id) {
-//		this.jobPositionDao.deleteById(id);
-//      return new SuccessResult("Job position has been deleted.");
-//	}
-//
-//	@Override
-//	public DataResult<JobPosition> getById(int id) {
-//		return new SuccessDataResult<JobPosition>(this.jobPositionDao.getById(id));
-//	}
 
 	@Override
 	public DataResult<List<JobPosition>> getAll() {
-		return new SuccessDataResult<List<JobPosition>>(this.jobPositionDao.findAll());
+		return new SuccessDataResult<List<JobPosition>>(this.jobPositionDao.findAll(), "iş pozisyonları listelendi");
 	}
 
 	@Override
-	public DataResult<JobPosition> getJobByTitle(String title) {
-		
-		return new SuccessDataResult<JobPosition>(this.jobPositionDao.findByJobTitle(title));
+	public DataResult<JobPosition> getByJobTitle(String jobTitle) {
+		return new SuccessDataResult<JobPosition>(this.jobPositionDao.findByJobTitle(jobTitle));
 	}
+
 	@Override
-	public DataResult<List<JobPosition>> getAllSorted(){
-		Sort sort = Sort.by(Sort.Direction.ASC,"jobTitle");
-		return new SuccessDataResult<List<JobPosition>>
-		(this.jobPositionDao.findAll(sort),"Başarılı");
+	public Result add(JobPosition jobPosition) {
+		if (!isFilled(jobPosition.getJobTitle()).isSuccess()) {
+			return new ErrorResult("Alan doldurulmalı!");
+		} else if (!existName(jobPosition.getJobTitle()).isSuccess()) {
+			return new ErrorResult("Bu iş pozisyonu daha önce eklenmiş!");
+		}
+		this.jobPositionDao.save(jobPosition);
+		return new SuccessResult("İş pozisyonu başarıyla eklendi");
+	}
+
+	public Result existName(String jobTitle) {
+		if (this.getByJobTitle(jobTitle).getData() == null) {
+			return new SuccessResult();
+		}
+		return new ErrorResult();
+	}
+
+	public Result isFilled(String name) {
+		if (name.length() > 0) {
+			return new SuccessResult();
+		}
+		return new ErrorResult();
 	}
 
 }

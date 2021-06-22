@@ -3,14 +3,14 @@ package kodlamaio.hrms.business.concretes;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-
-
 import kodlamaio.hrms.business.abstracts.JobseekerService;
+import kodlamaio.hrms.business.abstracts.UserService;
+import kodlamaio.hrms.core.utilities.helpers.abstracts.CheckUserService;
+import kodlamaio.hrms.core.utilities.helpers.abstracts.EmailService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
-import kodlamaio.hrms.core.utilities.results.ErrorDataResult;
+import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
@@ -20,64 +20,81 @@ import kodlamaio.hrms.entities.concretes.Jobseeker;
 @Service
 public class JobseekerManager implements JobseekerService {
 
-	@Autowired
 	private JobseekerDao jobseekerDao;
-	
-	
-	public JobseekerManager(JobseekerDao jobseekerDao)
-	{
+	private UserService userService;
+	private CheckUserService checkUserService;
+	private EmailService emailService;
+
+	@Autowired
+	public JobseekerManager(JobseekerDao jobseekerDao, UserService userService, CheckUserService checkUserService,
+			EmailService emailService) {
 		super();
 		this.jobseekerDao = jobseekerDao;
+		this.userService = userService;
+		this.checkUserService = checkUserService;
+		this.emailService = emailService;
 	}
 
+	@Override
+	public DataResult<List<Jobseeker>> getAll() {
+		return new SuccessDataResult<List<Jobseeker>>(this.jobseekerDao.findAll(), "İş arayanlar listelendi");
+	}
+
+	@Override
+	public DataResult<Jobseeker> getByIdentityNumber(String nationalId) {
+		return new SuccessDataResult<Jobseeker>(this.jobseekerDao.findByNationalId(nationalId));
+	}
 
 	@Override
 	public Result add(Jobseeker jobseeker) {
-		this.jobseekerDao.save(jobseeker);
-		return new SuccessResult("Jobseeker has been added.");
-	}
 
-	@Override
-	public Result update(Jobseeker jobseeker) {
-		this.jobseekerDao.save(jobseeker);
-		return new SuccessResult("Jobseeker has been updated.");
-	}
-
-	@Override
-	public Result delete(int id) {
-		this.jobseekerDao.deleteById(id);
-		return new SuccessResult("Jobseeker has been deleted.");
-	}
-
-	@Override
-	public DataResult<Jobseeker> getById(int id) {
-		var result = this.jobseekerDao.getById(id);
-		if (result != null) {
-			return new SuccessDataResult<Jobseeker>("User founded");
+//		if (!isFilledAllInformation(jobseeker.getFirstname(), jobseeker.getLastName(), jobseeker.getIdentityNumber(),
+//				jobseeker.getBirthYear(), jobseeker.getEmail(), jobseeker.getPassword(), jobseeker.getPassword_again())
+//						.isSuccess()) {
+//			return new ErrorResult("Tüm alanlar doldurulmalıdır!");
+		if (!existEmail(jobseeker.getEmail()).isSuccess()) {
+			return existEmail(jobseeker.getEmail());
+		} else if (!existIdentitynumber(jobseeker.getNationalId()).isSuccess()) {
+			return existIdentitynumber(jobseeker.getNationalId());
+		} else if (!isVerifyPassword(jobseeker.getPassword(), jobseeker.getPassword_again()).isSuccess()) {
+			return new ErrorResult("Şifre eşleşmedi!");
+		} else if (!checkUserService.checkIfRealPerson(jobseeker)) {
+			return new ErrorResult("Mernis doğrulama hatalı!");
+		} else if (!emailService.isVerified(jobseeker.isVerifyEmail())) {
+			return new ErrorResult("Email doğrulanamadı!");
 		}
-		return new ErrorDataResult<Jobseeker>("User NOT founded");
+		this.jobseekerDao.save(jobseeker);
+		return new SuccessResult("Kayıt işlemi başarılı");
 	}
-	@Override
-	public DataResult<List<Jobseeker>> getAll() {
-		final List<Jobseeker> jobseekers = jobseekerDao.findAll();
 
-		return new SuccessDataResult<List<Jobseeker>>(jobseekers);	
-	}
-	@Override
-	public DataResult<Jobseeker> getByNationalId(String nationalId) {
-		var result = this.jobseekerDao.getByNationalId(nationalId);
-		if (result != null) {
-			return new SuccessDataResult<Jobseeker>("User founded");
+	public Result existEmail(String email) {
+		if (this.userService.getByEmail(email).getData() == null) {
+			return new SuccessResult();
 		}
-		return new ErrorDataResult<Jobseeker>("User NOT founded");
+		return new ErrorResult("Email daha önce kullanılmış!");
 	}
 
-	
-
-	@Override
-	public DataResult<List<Jobseeker>> getAllSorted(){
-		Sort sort = Sort.by(Sort.Direction.ASC,"firstName");
-		return new SuccessDataResult<List<Jobseeker>>
-		(this.jobseekerDao.findAll(sort),"Başarılı");
+	public Result existIdentitynumber(String nationalId) {
+		if (this.getByIdentityNumber(nationalId).getData() == null) {
+			return new SuccessResult();
+		}
+		return new ErrorResult("Kimlik numarası daha önce kullanılmış!");
 	}
+
+	public Result isFilledAllInformation(String firstName, String lastName, String nationalId, int birthYear,
+			String email, String password, String passwordAgain) {
+		if (firstName.length() > 0 && lastName.length() > 0 && nationalId.length() > 0 && email.length() > 0
+				&& birthYear > 0 && email.length() > 0 && password.length() > 0 && passwordAgain.length() > 0) {
+			return new SuccessResult();
+		}
+		return new ErrorResult("Tüm alanlar doldurulmalıdır!");
+	}
+
+	public Result isVerifyPassword(String password, String passwordAgain) {
+		if (password.equals(passwordAgain)) {
+			return new SuccessResult();
+		}
+		return new ErrorResult("Şifre eşleşmedi!");
+	}
+
 }

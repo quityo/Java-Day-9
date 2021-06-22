@@ -1,7 +1,8 @@
 package kodlamaio.hrms.entities.concretes;
 
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,8 +33,8 @@ public class JobAdvert {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id",nullable = false)
-	private int id;
+	@Column(name = "job_advert_id",nullable = false)
+	private int jobAdvertId;
 	
 	
 	@NotNull
@@ -54,26 +55,29 @@ public class JobAdvert {
 	@Column(name = "open_position_count")
 	private int openPositionCount;
 	
-    @Column(name = "end_date")
-    private java.sql.Date endDate;
-	
+    @Column(name = "deadline")
+    private LocalDate deadline;
     
-	
-	@Column(name = "is_active")
-    private boolean active;
+    @Column(name = "release_date")
+	private LocalDate releaseDate;
 
-	@Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "is_active")
+	private boolean isActive;
+    
+    @Column(name = "is_confirm")
+	private boolean isConfirm;
 	
-	@ManyToOne
-	@JoinColumn(name = "employer_id")
+
+	
+	@ManyToOne()
+	@JoinColumn(name = "employer_id", referencedColumnName = "user_id")
 	private Employer employer;
 	
 	@ManyToOne
 	@JoinColumn(name = "job_position_id")
 	private JobPosition jobPosition;
 		
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "city_id")
 	private City city;
 	

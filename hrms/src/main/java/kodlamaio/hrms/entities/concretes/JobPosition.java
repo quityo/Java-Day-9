@@ -28,8 +28,8 @@ public class JobPosition{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id",nullable = false)
-	private int id;
+	@Column(name = "job_position_id",nullable = false)
+	private int jobPositionId;
 	
 	@NotBlank
 	@Column(name="job_title")
