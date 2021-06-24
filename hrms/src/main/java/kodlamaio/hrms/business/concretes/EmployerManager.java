@@ -76,4 +76,8 @@ public class EmployerManager implements EmployerService {
 		}
 		return new ErrorResult("Şifre eşleşmedi!");
 	}
+	@Override
+	public DataResult<Employer> getByUserId(int userId) {
+	return new SuccessDataResult<Employer>(this.employerDao.getByUserId(userId));
+	}
 }

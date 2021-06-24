@@ -1,7 +1,6 @@
 package kodlamaio.hrms.entities.concretes;
 
 
-import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -41,7 +40,7 @@ public class Jobseeker extends User{
 	private String nationalId;
 	
 	@Column(name= "date_of_birth")
-	private Date dateOfBirth;
+	private String dateOfBirth;
 	
 	@OneToMany(mappedBy = "jobseeker")
 	private List<Cv> cvs;

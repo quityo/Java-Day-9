@@ -23,6 +23,6 @@ public interface JobAdvertService {
 
 	Result updateIsConfirm(boolean isConfirm, int jobAdvertId);
 
-	Result updateIsActive(boolean isActive, int userId, int jobAdvertId);
+	Result updateIsActive(boolean isActive, int jobAdvertId);
  
 }

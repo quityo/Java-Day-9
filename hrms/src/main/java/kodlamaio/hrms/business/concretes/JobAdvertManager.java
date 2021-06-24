@@ -85,8 +85,8 @@ public class JobAdvertManager implements JobAdvertService {
 	}
 
 	@Override
-	public Result updateIsActive(boolean isActive, int userId, int jobAdvertId) {
-		this.jobAdvertDao.updateIsActive(isActive, userId, jobAdvertId);
+	public Result updateIsActive(boolean isActive,  int jobAdvertId) {
+		this.jobAdvertDao.updateIsActive(isActive, jobAdvertId);
 		return new SuccessResult("İş ilanı aktiflik durumu güncellendi");
 	}
 

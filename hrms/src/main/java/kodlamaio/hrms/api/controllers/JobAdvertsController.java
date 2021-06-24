@@ -20,7 +20,7 @@ import kodlamaio.hrms.entities.concretes.JobAdvert;
 import kodlamaio.hrms.entities.dtos.JobAdvertDto;
 
 @RestController
-@RequestMapping("/api/jobAdverts")
+@RequestMapping("/api/jobadverts")
 @CrossOrigin
 public class JobAdvertsController {
 	
@@ -60,23 +60,24 @@ public class JobAdvertsController {
 		}
 
 		@PostMapping("/add")
-		public Result add(@Valid @RequestBody JobAdvertDto jobPostingDto) {
-			return this.jobAdvertService.add(jobPostingDto);
+		public Result add(@Valid @RequestBody JobAdvertDto jobAdvertDto) {
+			return this.jobAdvertService.add(jobAdvertDto);
 		}
 
 		@PostMapping("/updateisactive")
-		public Result updateIsActive(@RequestParam boolean isActive, @RequestParam int userId,
-				@RequestParam int id) {
-			return this.jobAdvertService.updateIsActive(isActive, userId, id);
+		public Result updateIsActive(@RequestParam boolean isActive, 
+				@RequestParam int jobAdvertId) {
+			return this.jobAdvertService.updateIsActive(isActive, jobAdvertId);
 		}
 
 		@PostMapping("/updateisconfirm")
-		public Result updateIsConfirm(@RequestParam boolean isConfirm, @RequestParam int id) {
-			return this.jobAdvertService.updateIsConfirm(isConfirm, id);
+		public Result updateIsConfirm(@RequestParam boolean isConfirm, @RequestParam int jobAdvertId) {
+			return this.jobAdvertService.updateIsConfirm(isConfirm, jobAdvertId);
 		}
 
-		@GetMapping("/getbyjobpostingid")
-		public DataResult<JobAdvert> getByJobPostingId(@RequestParam int id) {
-			return this.jobAdvertService.getById(id);
+		@GetMapping("/getbyid")
+		public DataResult<JobAdvert> getById(@RequestParam int jobAdvertId){
+			return this.jobAdvertService.getById(jobAdvertId);
+		
 		}
 	}

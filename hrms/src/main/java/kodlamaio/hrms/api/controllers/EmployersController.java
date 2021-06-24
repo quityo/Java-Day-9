@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kodlamaio.hrms.business.abstracts.EmployerService;
@@ -39,6 +40,10 @@ public class EmployersController {
 	@PostMapping("/add")
 	public Result add(@Valid @RequestBody Employer employer) {
 		return this.employerService.add(employer);
+	}
+	@GetMapping("/getbyid")
+	public DataResult<Employer> getByUserId(@RequestParam("id") int userId){
+		return this.employerService.getByUserId(userId);
 	}
 
 }
