@@ -32,11 +32,10 @@ public class SkillManager implements SkillService{
 
 	
 
-	@Override
-	public DataResult<List<Skill>> getAll() {
+	    @Override
+	    public DataResult<List<Skill>> getAll() {
 		return new SuccessDataResult<List<Skill>>(this.skillDao.findAll());
-	}
-
-	
-
+	    }
+	    
+	   
 }

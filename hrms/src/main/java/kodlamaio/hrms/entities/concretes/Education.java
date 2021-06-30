@@ -1,7 +1,6 @@
 package kodlamaio.hrms.entities.concretes;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +23,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "educations")
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler","cv"})
 public class Education{
 
 	@Id
@@ -45,12 +45,11 @@ public class Education{
 	@Column(name = "end_year_of_school")
 	private LocalDate endYearOfSchool;
 
-	 @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	 @ManyToOne
-	 @JoinColumn(name = "cv_id")
-	 private Cv cv;
-	 
-	 @Column(name = "created_date", columnDefinition = "Date default CURRENT_DATE")
-	 private final LocalDateTime createdDate = LocalDateTime.now();
+	@ManyToOne()
+	@JoinColumn(name="cv_id")
+	private Cv cv;
 	
+	 @ManyToOne()
+	 @JoinColumn(name = "jobseeker_id", referencedColumnName = "user_id")
+	 private Jobseeker jobseeker;
 }

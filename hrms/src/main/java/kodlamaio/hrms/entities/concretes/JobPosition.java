@@ -34,7 +34,11 @@ public class JobPosition{
 	@NotBlank
 	@Column(name="job_title")
 	private String jobTitle;
-
+	
+	@NotBlank
+	@Column(name="job_description")
+	private String jobDescription;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "jobPosition")
 	private List<JobAdvert> jobAdverts;

@@ -1,8 +1,14 @@
 package kodlamaio.hrms.entities.dtos;
 
+import java.util.List;
 
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import kodlamaio.hrms.entities.concretes.Education;
+import kodlamaio.hrms.entities.concretes.Experience;
+import kodlamaio.hrms.entities.concretes.Jobseeker;
+import kodlamaio.hrms.entities.concretes.Language;
+import kodlamaio.hrms.entities.concretes.Skill;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,18 +18,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CvDto {
 	
-	private int cvId;
-	private String schoolName;
-	private String department;
-	private LocalDate startYearOfSchool;
-	private LocalDate endYearOfSchool;
-	private String workingPlace;
-	private LocalDate startYearOfWork;
-	private LocalDate endYearOfWork;
-	private String language;
-	private int level;
-	private String githubAddress;
-	private String linkedinAddress;
-	private String skillName;
-	private String coverLetter;
+	@JsonIgnore()
+	public Jobseeker jobseeker;
+	public List<Education> educations;
+	public List<Experience> experiences;
+	public List<Language> languages;
+	public List<Skill> skills;
 	}

@@ -45,4 +45,7 @@ public class Language{
     @JoinColumn(name = "cv_id")
     private Cv cv;
 	
+	 @ManyToOne()
+	    @JoinColumn(name = "jobseeker_id", referencedColumnName = "user_id")
+	    private Jobseeker jobseeker;
 }

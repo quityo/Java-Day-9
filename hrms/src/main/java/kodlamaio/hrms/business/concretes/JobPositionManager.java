@@ -1,5 +1,6 @@
 package kodlamaio.hrms.business.concretes;
 
+import org.springframework.data.domain.Sort;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,13 @@ public class JobPositionManager implements JobPositionService {
 			return new SuccessResult();
 		}
 		return new ErrorResult();
+	}
+
+	@Override
+	public DataResult<List<JobPosition>> getAllSorted() {
+		Sort sort = Sort.by(Sort.Direction.ASC,"jobTitle");
+		return new SuccessDataResult<List<JobPosition>>
+		(this.jobPositionDao.findAll(sort),"Başarılı");
 	}
 
 }

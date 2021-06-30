@@ -54,9 +54,9 @@ public class EmployerManager implements EmployerService {
 		return new SuccessResult("Kayıt işlemi başarılı");
 	}
 
-	public Result isFilledAllInformation(String companyName, String webSite, String email, String phoneNumber,
+	public Result isFilledAllInformation(String companyName, String website, String email, String phoneNumber,
 			String password, String passwordAgain) {
-		if (companyName.length() > 0 && webSite.length() > 0 && email.length() > 0 && phoneNumber.length() > 0
+		if (companyName.length() > 0 && website.length() > 0 && email.length() > 0 && phoneNumber.length() > 0
 				&& password.length() > 0 && passwordAgain.length() > 0) {
 			return new SuccessResult();
 		}

@@ -10,5 +10,4 @@ public interface SkillService {
 	Result add(Skill skill);
 		
 	DataResult<List<Skill>> getAll();
-	
 	}

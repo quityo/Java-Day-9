@@ -38,5 +38,8 @@ public class JobPositionsController {
 	public Result add(@Valid @RequestBody JobPosition jobPosition) {
 		return this.jobPositionService.add(jobPosition);
 	}
-
+	@GetMapping("/getallasc")
+	public DataResult<List<JobPosition>> getAllSorted() {
+		return this.jobPositionService.getAllSorted();
+	}
 }

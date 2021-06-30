@@ -61,6 +61,7 @@ public class JobAdvertManager implements JobAdvertService {
 		jobAdvert.setDeadline(jobAdvertDto.getDeadline());
 		jobAdvert.setActive(true);
 		jobAdvert.setConfirm(false);
+		
 		jobAdvert.setEmployer(this.employerDao.getByUserId(jobAdvertDto.getEmployerId()));
 
 		jobAdvert.setJobPosition(this.jobPositionDao.getByJobPositionId(jobAdvertDto.getJobPositionId()));

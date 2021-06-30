@@ -2,19 +2,16 @@ package kodlamaio.hrms.entities.concretes;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,21 +23,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
-@Table(name = "cv ")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler","cv"})
-
+@Table(name = "cvs")
 public class Cv {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "cv_id")
 	private int cvId;
-
-	@JsonProperty(access = Access.WRITE_ONLY)
-	@JoinColumn(name = "jobseeker_id", referencedColumnName = "user_id")
-	@ManyToOne()
-	private Jobseeker jobseeker;
-
+	
+	@Column(name="image_url")
+	private String imageUrl;
+	
 	@Column(name = "github_address")
 	private String githubAddress;
 
@@ -49,7 +42,14 @@ public class Cv {
 
 	@Column(name = "cover_letter")
 	private String coverLetter;
-
+	
+	@Column(name="image_link")
+	private String imageLink;
+	
+	
+	@OneToMany(mappedBy = "cv")
+	private List<Skill> skills;
+	
 	@OneToMany(mappedBy = "cv")
 	private List<Education> educations;
 
@@ -59,7 +59,8 @@ public class Cv {
 	@OneToMany(mappedBy = "cv")
 	private List<Language> languages;
 
-	@OneToMany(mappedBy = "cv")
-	private List<Skill> skills;
-
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "jobseeker_id", referencedColumnName = "user_id")
+	private Jobseeker jobseeker;
+	
 }

@@ -9,8 +9,8 @@ public class SuccessDataResult<T> extends DataResult<T> {
 		super(data, true);
 	}
 
-	public SuccessDataResult(String messge) {
-		super(null, true, messge);
+	public SuccessDataResult(String message) {
+		super(null, true, message);
 	}
 
 	public SuccessDataResult() {

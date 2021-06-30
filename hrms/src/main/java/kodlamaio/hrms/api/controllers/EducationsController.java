@@ -38,5 +38,14 @@ public class EducationsController {
 	public DataResult<List<Education>> getAll() {
 		return this.educationService.getAll();
 	}
+	@GetMapping("/getASC")
+	public DataResult<List<Education>> getASCOrderByEndYearOfSchool(int jobseekerId){
+		return this.educationService.getByJobseekerIdOrderByEndYearOfSchoolASC(jobseekerId);
+	}
+	
+	@GetMapping("/getDESC")
+	public DataResult<List<Education>> getDESCOrderByEndYearOfSchool(int jobseekerId){
+		return this.educationService.getByJobseekerIdOrderByEndYearOfSchoolDESC(jobseekerId);
+	}
 
 }

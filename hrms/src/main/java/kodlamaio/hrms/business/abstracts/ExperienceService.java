@@ -7,9 +7,10 @@ import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.entities.concretes.Experience;
 
 public interface ExperienceService {
-	Result add(Experience workExperience);
+	Result add(Experience experience);
 
 	DataResult<List<Experience>> getAll();
 
-	DataResult<List<Experience>> sortByEndAt();
+	DataResult<List<Experience>> getByJobseekerIdOrderByDateOfEndASC(int jobseekerId);
+	DataResult<List<Experience>> getByJobseekerIdOrderByDateOfEndDESC(int jobseekerId);
 }

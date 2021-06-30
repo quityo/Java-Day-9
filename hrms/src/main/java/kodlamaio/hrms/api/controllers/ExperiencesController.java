@@ -39,4 +39,13 @@ public class ExperiencesController {
 	public DataResult<List<Experience>> getAll() {
 		return this.experienceService.getAll();
 	}
+	@GetMapping("/getByASC")
+	public DataResult<List<Experience>> getByJobseekerIdOrderByDateOfEndASC(int jobseeker_id){
+		return this.experienceService.getByJobseekerIdOrderByDateOfEndASC(jobseeker_id);
+	}
+	
+	@GetMapping("/getByDESC")
+	public DataResult<List<Experience>> getByJobseekerIdOrderByDateOfEndDESC(int jobseeker_id){
+		return this.experienceService.getByJobseekerIdOrderByDateOfEndDESC(jobseeker_id);
+	}
 }

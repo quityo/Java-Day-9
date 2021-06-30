@@ -2,21 +2,17 @@ package kodlamaio.hrms.core.utilities.helpers.abstracts;
 
 import org.springframework.stereotype.Service;
 
-import kodlamaio.hrms.entities.concretes.Jobseeker;
-
 @Service
 public class MernisServiceAdapter implements CheckUserService {
 
 	@Override
-	public boolean checkIfRealPerson(Jobseeker jobseeker) {
-		// simulation
-		if (jobseeker.getNationalId() == jobseeker.getNationalId()
-				&& jobseeker.getFirstName() == jobseeker.getFirstName()
-				&& jobseeker.getLastName() == jobseeker.getFirstName()
-				&& jobseeker.getDateOfBirth() == jobseeker.getDateOfBirth()) {
+	public boolean checkIfRealPerson(String nationalityId, int dateOfBirth) {
+		if (nationalityId.length() == 11 && dateOfBirth > 1900) {
 			return true;
 		}
-		return false;
+		else {
+			return false;
+		}
 	}
 
 }

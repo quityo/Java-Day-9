@@ -9,5 +9,6 @@ import kodlamaio.hrms.entities.concretes.Education;
 public interface EducationService {
 	DataResult<List<Education>> getAll();
     Result add(Education education);
-    DataResult<List<Education>> sortByEndAt();
+	DataResult<List<Education>> getByJobseekerIdOrderByEndYearOfSchoolASC(int jobseekerId);
+	DataResult<List<Education>> getByJobseekerIdOrderByEndYearOfSchoolDESC(int jobseekerId);
 }

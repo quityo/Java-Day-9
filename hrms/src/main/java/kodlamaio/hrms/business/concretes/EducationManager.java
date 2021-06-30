@@ -36,9 +36,23 @@ public class EducationManager implements EducationService {
 	}
 
 	@Override
-	public DataResult<List<Education>> sortByEndAt() {
-		Sort sort = Sort.by(Sort.Direction.DESC, "endYearOfSchool");
-		return new SuccessDataResult<List<Education>>(this.educationDao.findAll(sort));
+	public DataResult<List<Education>> getByJobseekerIdOrderByEndYearOfSchoolASC(int jobseekerId) {
+		Sort sortBy = Sort.by(Sort.Direction.ASC,"endYearOfSchool");
+		var result = this.educationDao.findAll(sortBy);
+		if (result != null) {
+			return new SuccessDataResult<List<Education>>(result,"asc sorted ok");
+		}
+		return new SuccessDataResult<List<Education>>("asc sorted NOT ok");
+	}
+
+	@Override
+	public DataResult<List<Education>> getByJobseekerIdOrderByEndYearOfSchoolDESC(int jobseekerId) {
+		Sort sortBy = Sort.by(Sort.Direction.DESC,"endYearOfSchool");
+		var result = this.educationDao.findAll(sortBy);
+		if (result != null) {
+			return new SuccessDataResult<List<Education>>(result,"desc sorted ok");
+		}
+		return new SuccessDataResult<List<Education>>("desc sorted NOT ok");
 	}
 
 	@Override

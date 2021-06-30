@@ -40,5 +40,5 @@ public class LanguagesController {
 	public DataResult<List<Language>> getAll() {
 		return this.languageService.getAll();
 	}
-
+	
 }

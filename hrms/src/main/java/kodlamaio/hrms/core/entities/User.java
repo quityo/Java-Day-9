@@ -1,7 +1,5 @@
 package kodlamaio.hrms.core.entities;
 
-import java.awt.Image;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -36,7 +33,7 @@ public class User {
 	@NotBlank(message = "Şifre boş olamaz")
 	@Column(name = "password")
 	private String password;
-
+	
 	@NotBlank(message = "Şifre tekrarı boş olamaz")
 	@Column(name = "password_again")
 	private String password_again;
@@ -44,10 +41,8 @@ public class User {
 	@Column(name = "is_verify_email")
 	private boolean isVerifyEmail;
 
-	
-
-	public User(int userId) {
-		super();
-		this.userId = userId;
+	public User(String email, String password) {
+		this.email = email;
+		this.password = password;
 	}
 }

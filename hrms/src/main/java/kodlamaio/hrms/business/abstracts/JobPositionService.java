@@ -12,4 +12,5 @@ public interface JobPositionService {
 	DataResult<JobPosition> getByJobTitle(String jonTitle);
 	
 	Result add(JobPosition jobPosition);
+	DataResult<List<JobPosition>> getAllSorted();
 }
